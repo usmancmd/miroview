@@ -15,7 +15,37 @@ console.log(scrcpyPath);
 const command = `${scrcpyPath} --window-title "My Phone Screen"`;
 console.log(command);
 
-function getDeviceIpAddress(callback) {
+// get device ip address 1 using ifconfig
+function getDeviceIpAddress1(callback) {
+	exec("adb shell ifconfig wlan0", (error, stdout, stderr) => {
+		if (error) {
+			console.error(`Error fetching IP address: ${error.message}`);
+			return callback(null);
+		}
+		if (stderr) {
+			console.error(`ADB stderr: ${stderr}`);
+			return callback(null);
+		}
+
+		console.log(`ADB stdout: ${stdout}`);
+
+		// Parsing the IP address from the stdout
+		const ipMatch =
+			stdout.match(/inet\s+addr:([0-9.]+)/) || stdout.match(/inet\s+([0-9.]+)/);
+		const ipAddress = ipMatch ? ipMatch[1] : null;
+
+		if (ipAddress) {
+			console.log(`Device IP Address: ${ipAddress}`);
+			callback(ipAddress);
+		} else {
+			console.error("IP address not found in ADB output.");
+			callback(null);
+		}
+	});
+}
+
+// get device ip adderess
+function getDeviceIpAddress2(callback) {
 	// Step 1: List all connected devices
 	exec("adb devices", (error, stdout, stderr) => {
 		if (error) {
@@ -85,7 +115,7 @@ function getDeviceIpAddress(callback) {
 
 let scrcpyProcess;
 function startScrcpy() {
-	getDeviceIpAddress((ipAddress) => {
+	getDeviceIpAddress2((ipAddress) => {
 		if (!ipAddress) {
 			console.error("Cannot start scrcpy without an IP address.");
 			return;
