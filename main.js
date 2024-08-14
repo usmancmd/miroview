@@ -16,7 +16,7 @@ const command = `${scrcpyPath} --window-title "My Phone Screen"`;
 console.log(command);
 
 // get device ip address 1 using ifconfig
-function getDeviceIpAddress1(callback) {
+function getDeviceIpAddress3(callback) {
 	exec("adb shell ifconfig wlan0", (error, stdout, stderr) => {
 		if (error) {
 			console.error(`Error fetching IP address: ${error.message}`);
@@ -45,7 +45,7 @@ function getDeviceIpAddress1(callback) {
 }
 
 // get device ip adderess
-function getDeviceIpAddress2(callback) {
+function getDeviceIpAddress1(callback) {
 	// Step 1: List all connected devices
 	exec("adb devices", (error, stdout, stderr) => {
 		if (error) {
@@ -110,6 +110,79 @@ function getDeviceIpAddress2(callback) {
 				callback(null);
 			}
 		});
+	});
+}
+
+function getDeviceIpAddress2(callback) {
+	// Step 1: List all connected devices
+	exec("adb devices", (error, stdout, stderr) => {
+		if (error) {
+			console.error(`Error listing devices: ${error.message}`);
+			return callback(null);
+		}
+		if (stderr) {
+			console.error(`ADB stderr: ${stderr}`);
+			return callback(null);
+		}
+
+		// Parse the device list
+		const devices = stdout
+			.split("\n")
+			.filter((line) => line.includes("\tdevice"))
+			.map((line) => line.split("\t")[0]);
+
+		if (devices.length === 0) {
+			console.error("No devices connected.");
+			return callback(null);
+		}
+
+		// Step 2: If there's only one device, use it directly
+		let targetDevice = devices[0];
+
+		if (devices.length > 1) {
+			console.log("Multiple devices found:");
+			devices.forEach((device, index) => {
+				console.log(`${index + 1}: ${device}`);
+			});
+
+			// For simplicity, we'll select the first non-emulator device (modify this as needed)
+			targetDevice =
+				devices.find((device) => !device.startsWith("emulator")) || devices[0];
+			console.log(`Selected device: ${targetDevice}`);
+		} else {
+			console.log(`Only one device found, selecting: ${targetDevice}`);
+		}
+
+		// Step 3: Fetch the IP address from the selected device
+		exec(
+			`adb -s ${targetDevice} shell ifconfig wlan0`,
+			(error, stdout, stderr) => {
+				if (error) {
+					console.error(`Error fetching IP address: ${error.message}`);
+					return callback(null);
+				}
+				if (stderr) {
+					console.error(`ADB stderr: ${stderr}`);
+					return callback(null);
+				}
+
+				console.log(`ADB stdout: ${stdout}`);
+
+				// Parsing the IP address from the stdout
+				const ipMatch =
+					stdout.match(/inet\s+addr:([0-9.]+)/) ||
+					stdout.match(/inet\s+([0-9.]+)/);
+				const ipAddress = ipMatch ? ipMatch[1] : null;
+
+				if (ipAddress) {
+					console.log(`Device IP Address: ${ipAddress}`);
+					callback(ipAddress);
+				} else {
+					console.error("IP address not found in ADB output.");
+					callback(null);
+				}
+			}
+		);
 	});
 }
 
