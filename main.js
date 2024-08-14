@@ -15,91 +15,6 @@ console.log(scrcpyPath);
 const command = `${scrcpyPath} --window-title "My Phone Screen"`;
 console.log(command);
 
-// function getDeviceIpAddress(callback) {
-// 	exec("adb shell ip route", (error, stdout, stderr) => {
-// 		if (error) {
-// 			console.error(`Error fetching IP address: ${error.message}`);
-// 			return callback(null);
-// 		}
-// 		if (stderr) {
-// 			console.error(`ADB stderr: ${stderr}`);
-// 			return callback(null);
-// 		}
-
-// 		console.log(`ADB stdout: ${stdout}`); // Log the full stdout for debugging
-
-// 		// Parsing the IP address from the stdout
-// 		const ipMatch = stdout.match(/src\s([0-9.]+)/);
-// 		const ipAddress = ipMatch ? ipMatch[1] : null;
-
-// 		if (ipAddress) {
-// 			console.log(`Device IP Address: ${ipAddress}`);
-// 			callback(ipAddress);
-// 		} else {
-// 			console.error("IP address not found in ADB output.");
-// 			callback(null);
-// 		}
-// 	});
-// }
-
-const seperator = "";
-let scrcpyProcess; // Store the process reference
-
-// function getDeviceIpAddress(callback) {
-// 	exec("adb shell ifconfig wlan0", (error, stdout, stderr) => {
-// 		if (error) {
-// 			console.error(`Error fetching IP address: ${error.message}`);
-// 			return callback(null);
-// 		}
-// 		if (stderr) {
-// 			console.error(`ADB stderr: ${stderr}`);
-// 			return callback(null);
-// 		}
-
-// 		console.log(`ADB stdout: ${stdout}`);
-
-// 		// Parsing the IP address from the stdout
-// 		const ipMatch =
-// 			stdout.match(/inet\s+addr:([0-9.]+)/) || stdout.match(/inet\s+([0-9.]+)/);
-// 		const ipAddress = ipMatch ? ipMatch[1] : null;
-
-// 		if (ipAddress) {
-// 			console.log(`Device IP Address: ${ipAddress}`);
-// 			callback(ipAddress);
-// 		} else {
-// 			console.error("IP address not found in ADB output.");
-// 			callback(null);
-// 		}
-// 	});
-// }
-
-// function startScrcpy() {
-// 	getDeviceIpAddress((ipAddress) => {
-// 		if (!ipAddress) {
-// 			console.error("Cannot start scrcpy without an IP address.");
-// 			return;
-// 		}
-
-// 		const command = `${scrcpyPath} --tcpip=${ipAddress}:5555 --window-title "My Phone Screen"`;
-
-// 		exec(command, (error, stdout, stderr) => {
-// 			if (error) {
-// 				console.error(`Error starting scrcpy: ${error.message}`);
-// 				return;
-// 			}
-// 			if (stderr) {
-// 				console.error(`scrcpy stderr: ${stderr}`);
-// 				return;
-// 			}
-// 			console.log(`scrcpy stdout: ${stdout}`);
-// 		});
-// 	});
-// }
-
-// Call this function to start the process
-// startScrcpy();
-
-// ggggggggg
 function getDeviceIpAddress(callback) {
 	// Step 1: List all connected devices
 	exec("adb devices", (error, stdout, stderr) => {
@@ -168,6 +83,7 @@ function getDeviceIpAddress(callback) {
 	});
 }
 
+let scrcpyProcess;
 function startScrcpy() {
 	getDeviceIpAddress((ipAddress) => {
 		if (!ipAddress) {
@@ -176,19 +92,6 @@ function startScrcpy() {
 		}
 
 		const command = `${scrcpyPath} --tcpip=${ipAddress}:5555 --window-title "My Phone Screen"`;
-
-		// here we are executing the command directly
-		// exec(command, (error, stdout, stderr) => {
-		// 	if (error) {
-		// 		console.error(`Error starting scrcpy: ${error.message}`);
-		// 		return;
-		// 	}
-		// 	if (stderr) {
-		// 		console.error(`scrcpy stderr: ${stderr}`);
-		// 		return;
-		// 	}
-		// 	console.log(`scrcpy stdout: ${stdout}`);
-		// });
 
 		// here we execute the command using spawn
 		scrcpyProcess = spawn(command, { shell: true });
