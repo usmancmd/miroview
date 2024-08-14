@@ -123,43 +123,6 @@ function startScrcpy() {
 }
 
 // Function to stop scrcpy
-const ps = require("ps-node");
-
-// function stopScrcpy() {
-// 	if (scrcpyProcess) {
-// 		scrcpyProcess.kill("SIGKILL"); // Forcefully kill scrcpy
-// 		console.log("scrcpy process forcefully terminated");
-
-// 		// Check for any orphaned adb processes related to scrcpy
-// 		try {
-// 			// Find any adb processes started by scrcpy
-// 			const result = execSync(
-// 				`powershell -Command "Get-Process | Where-Object { $_.ProcessName -eq 'adb' -and $_.MainWindowTitle -like '*exec-out*' }"`
-// 			).toString();
-// 			const lines = result.trim().split("\n");
-
-// 			lines.forEach((line) => {
-// 				const columns = line.trim().split(/\s+/);
-// 				const pid = columns[2]; // Process ID of the adb exec-out (adjust index if necessary)
-
-// 				if (pid) {
-// 					execSync(`taskkill /PID ${pid} /F`); // Kill the specific adb process
-// 					console.log(`adb subprocess with PID ${pid} terminated`);
-// 				}
-// 			});
-// 		} catch (error) {
-// 			console.error(
-// 				"Error checking for orphaned adb processes:",
-// 				error.message
-// 			);
-// 		}
-// 	} else {
-// 		console.log("scrcpy is not running");
-// 	}
-// }
-
-// Call this function to start the process
-
 function stopScrcpy() {
 	if (scrcpyProcess) {
 		scrcpyProcess.kill("SIGKILL"); // Forcefully kill scrcpy
@@ -195,9 +158,6 @@ function stopScrcpy() {
 function testScrcpy() {
 	return "testing scrcpy connection for the first time";
 }
-
-// startScrcpy();
-// setTimeout(stopScrcpy, 50000);
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require("electron-squirrel-startup")) {
