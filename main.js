@@ -278,7 +278,7 @@ const isLinux = process.platform === "linux";
 const createWindow = () => {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
-		width: 800,
+		width: 200,
 		height: 600,
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
@@ -289,7 +289,7 @@ const createWindow = () => {
 	mainWindow.loadFile(path.join(__dirname, "src", "index.html"));
 
 	// Open the DevTools.
-	mainWindow.webContents.openDevTools();
+	// mainWindow.webContents.openDevTools();
 };
 
 // This method will be called when Electron has finished
