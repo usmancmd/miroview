@@ -6,7 +6,7 @@ let scrcpyProcess;
 let isScrcpyProcessExist = false;
 let isDisconnected = false;
 
-const startScreenMirror = async () => {
+async function stopMirroringProcess() {
 	// console.log("ipAddress", ipAddress);
 
 	try {
@@ -75,7 +75,7 @@ const startScreenMirror = async () => {
 		// return { statusCode: 3, message: "Connection interrupted" };
 		return error;
 	}
-};
+}
 
 async function executeScrcpyCommand(command) {
 	return new Promise((resolve, reject) => {
@@ -144,7 +144,7 @@ async function executeScrcpyCommand(command) {
 	});
 }
 
-async function stopScreenMirror() {
+async function stopMirroringProcess() {
 	if (isScrcpyProcessExist === true) {
 		if (scrcpyProcess) {
 			console.log("line 265", scrcpyProcess.toString());
@@ -237,6 +237,6 @@ async function stopScrcpyProcess() {
 }
 
 module.exports = {
-	startScreenMirror,
-	stopScreenMirror,
+	stopMirroringProcess,
+	stopMirroringProcess,
 };
