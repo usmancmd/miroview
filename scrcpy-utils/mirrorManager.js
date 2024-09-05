@@ -144,6 +144,99 @@ async function executeScrcpyCommand(command) {
 	});
 }
 
+async function stopScreenMirror() {
+	if (isScrcpyProcessExist === true) {
+		if (scrcpyProcess) {
+			console.log("line 265", scrcpyProcess.toString());
+			// scrcpyProcess.kill("SIGTERM"); // Graceful termination
+
+			console.log("scrcpy process termination signal sent");
+
+			// Handle process errors
+			scrcpyProcess.on("error", (err) => {
+				console.error(`Failed to start scrcpy: ${err.message}`);
+			});
+
+			// Check for orphaned adb processes
+			const isDisconnected = await stopScrcpyProcess();
+			// if (isDisconnected) return isDisconnected;
+			if (isDisconnected) {
+				return { statusCode: 4, message: "Device Disconnected" };
+			}
+		} else {
+			console.log("scrcpy is not running");
+		}
+	}
+}
+
+async function stopScrcpyProcess() {
+	return new Promise((resolve, reject) => {
+		// let isDisconnected = false;
+		try {
+			const adbTaskList = execSync(
+				`tasklist /FI "IMAGENAME eq adb.exe"`
+			).toString();
+			const scrcpyTaskList = execSync(
+				`tasklist /FI "IMAGENAME eq scrcpy.exe"`
+			).toString();
+			// console.log("adbTaskList: ", adbTaskList);
+			// console.log("scrcpyTaskList: ", scrcpyTaskList);
+
+			const adbTaskLines = adbTaskList.trim().split("\n").slice(3); // Skip the header lines
+			const scrcpyTaskLines = scrcpyTaskList.trim().split("\n").slice(2); // Skip the header lines
+			// console.log("adbTaskLines: ", adbTaskLines);
+			// console.log("scrcpyTaskLines: ", scrcpyTaskLines);
+
+			scrcpyTaskLines.forEach((line) => {
+				const columns = line.trim().split(/\s+/);
+				// console.log("columns: ", columns);
+
+				const pid = columns[1]; // Process ID of the adb.exe process
+
+				if (pid) {
+					try {
+						const result = execSync(`taskkill /PID ${pid} /F`); // Kill the specific adb process
+						if (result) {
+							isScrcpyProcessExist = false;
+						}
+					} catch (error) {
+						console.log("An error occured while stoping scrcpy Process", error);
+					}
+
+					console.log(`scrcpy process with PID ${pid} terminated`);
+				}
+			});
+
+			// setTimeout(() => {
+			adbTaskLines.forEach((line) => {
+				const columns = line.trim().split(/\s+/);
+				// console.log("columns: ", columns);
+
+				const pid = columns[1]; // Process ID of the adb.exe process
+
+				if (pid) {
+					const result = execSync(`taskkill /PID ${pid} /F`); // Kill the specific adb process
+					if (result) {
+						isDisconnected = true;
+						resolve(isDisconnected);
+					}
+					console.log(`adb subprocess with PID ${pid} terminated`);
+				}
+			});
+			// }, 500);
+
+			return;
+		} catch (error) {
+			reject(isDisconnected);
+			console.error(
+				"Error checking for orphaned adb processes:",
+				error.message
+			);
+		}
+	});
+}
+
 module.exports = {
 	startScreenMirror,
+	stopScreenMirror,
 };
