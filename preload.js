@@ -1,6 +1,10 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
+	// Window navbar button channels
+	minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
+	quitWindow: () => ipcRenderer.invoke("quit-window"),
+
 	// App functions channels
 	startScrcpy: () => ipcRenderer.invoke("start-scrcpy"),
 	stopScrcpy: () => ipcRenderer.invoke("stop-scrcpy"),
