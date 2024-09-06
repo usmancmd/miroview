@@ -1,5 +1,6 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron");
 const path = require("node:path");
+const eventEmitter = require("./events"); // Import the shared EventEmitter
 
 const {
 	startMirroringProcess,
@@ -41,6 +42,12 @@ ipcMain.handle("stop-scrcpy", async () => {
 	// return isMirroringDisconnected
 	// 	? "Mirroring Disconnected"
 	// 	: "Failed to Disconnect mirroring";
+});
+
+eventEmitter.on("custom-event", (data) => {
+	console.log("Received message from manager.js:", data);
+	mainWindow.webContents.send("status-update", JSON.stringify(data));
+	// we can add more logic here to handle the message
 });
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
