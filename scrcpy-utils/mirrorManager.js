@@ -112,32 +112,6 @@ async function executeScrcpyCommand(command) {
 			// if (output.includes("Killing the server"))
 		});
 
-		scrcpyProcess.on("close", (code) => {
-			console.log("from line 88: scrcpy exit code:", typeof code, code);
-			if (code === 0) {
-				eventEmitter.emit("custom-event", {
-					statusCode: 4,
-					message: "Device disconnected",
-				});
-			} else if (code === 2) {
-				eventEmitter.emit("custom-event", {
-					statusCode: 5,
-					message: "Connection Interrupt",
-				});
-			}
-			// } else if (code === 1) {
-			// 	eventEmitter.emit("custom-event", {
-			// 		statusCode: 7,
-			// 		message: "Connection Failled, Check your wi-fi connection...",
-			// 	});
-
-			// if (!isConnected) {
-			// 	resolve(false);
-			// } else if (code === 2) {
-			// 	resolve({ statusCode: 4, message: "Device disconnected" });
-			// }
-		});
-
 		scrcpyProcess.on("error", (err) => {
 			reject(err);
 		});
