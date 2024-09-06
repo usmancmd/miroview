@@ -67,11 +67,19 @@ let mainWindow;
 const createWindow = () => {
 	// Create the browser window.
 	mainWindow = new BrowserWindow({
-		width: 800,
-		height: 600,
+		// width: isDev ? 1400 : 730,
+		width: 730,
+		height: 450,
+		frame: false,
+		resizable: false,
 		webPreferences: {
 			preload: path.join(__dirname, "preload.js"),
 		},
+	});
+
+	// force window to minimize if user want to maximize by double clicking the top bar
+	mainWindow.on("maximize", (e) => {
+		mainWindow.unmaximize();
 	});
 
 	// and load the index.html of the app.
@@ -84,6 +92,16 @@ const createWindow = () => {
 		mainWindow.setTitle("Miroview");
 	});
 };
+
+// minimize App
+ipcMain.handle("minimize-window", () => {
+	mainWindow.minimize();
+});
+
+// close App
+ipcMain.handle("quit-window", () => {
+	app.quit();
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.

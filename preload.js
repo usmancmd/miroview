@@ -1,7 +1,7 @@
 const { contextBridge, ipcRenderer } = require("electron");
 
 contextBridge.exposeInMainWorld("electronAPI", {
-	// Window navbar button channels
+	// Window top bar button channels
 	minimizeWindow: () => ipcRenderer.invoke("minimize-window"),
 	quitWindow: () => ipcRenderer.invoke("quit-window"),
 
