@@ -301,7 +301,7 @@ async function stopMirroringHandler() {
 			// 	break;
 			case 4:
 				// statusTemplate.innerText = "Device disconnected.";
-				// updateStatusIcon(statusRes.message, statusRes.statusCode);
+				updateStatusIcon(statusRes.message, statusRes.statusCode);
 				break;
 				// default:
 				// statusTemplate.innerText = "Unknown status.";
@@ -369,3 +369,32 @@ function updateStatusIcon(msg, code) {
 		netStatus.title = msg;
 	}
 }
+
+window.electronAPI.customEvent.on("status-update", (event, data) => {
+	const status = JSON.parse(data);
+	console.log("Received status update:", status);
+	// if (status) {
+	// 	statusTemplate.innerText = status.message;
+	// }
+
+	// if (status.statusCode === 10) {
+	// 	netStatus.innerHTML = '<i class="fa-solid fa-plug-circle-check"></i>';
+	// }
+
+	if (status.statusCode === 4) {
+		resetStart(status.statusCode);
+		updateStatusIcon(status.message, status.statusCode);
+		// netStatus.className = "net-icon-non-active";
+		// netStatus.title = status.message;
+	} else if (status.statusCode === 5) {
+		resetStart(status.statusCode);
+		updateStatusIcon(status.message, status.statusCode);
+		// netStatus.innerHTML = '<i class="fa-solid fa-road-circle-xmark"></i>';
+		// netStatus.className = "net-icon-active-red";
+		// netStatus.title = status.message;
+		// setTimeout(() => {
+		// 	netStatus.className = "net-icon-non-active";
+		// 	// netStatus.title = "No Active Connections";
+		// }, 6000);
+	}
+});
