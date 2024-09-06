@@ -1,3 +1,7 @@
+const startBtn = document.getElementById("start-btn-id");
+const startIcon = document.getElementById("start-icon-id");
+const startText = document.getElementById("start-btn-text-id");
+
 // Status
 const netStatus = document.getElementById("net-status-id");
 
@@ -188,7 +192,12 @@ cameraLink.addEventListener("click", cameraLinkHandler);
 
 const startScrcpyConnection = async () => {
 	const res = await window.electronAPI.startScrcpy();
-	console.log("am here...");
+	// console.log("am here...", res);
+	return res;
+};
+
+const stopScrcpyConnection = async () => {
+	const res = await window.electronAPI.stopScrcpy();
 	return res;
 };
 
@@ -264,6 +273,42 @@ async function startMirroringHandler() {
 	} catch (error) {
 		console.error("An error occurred:", error);
 		// statusTemplate.innerText = "An unexpected error occurred.";
+	}
+}
+
+async function stopMirroringHandler() {
+	// statusTemplate.innerText = "Disconnecting...";
+	try {
+		const response = await stopScrcpyConnection();
+		const statusRes = JSON.parse(response);
+		// resetStart(statusRes.statusCode);
+
+		console.log(statusRes); // log this for now!
+
+		switch (statusRes.statusCode) {
+			// case 0:
+			// 	statusTemplate.innerText = "Connection successful.";
+			// 	break;
+			// case 1:
+			// 	statusTemplate.innerText = "Connection failed.";
+			// 	break;
+			// case 2:
+			// 	statusTemplate.innerText = "No device found.";
+			// 	break;
+			// case 3:
+			// 	statusTemplate.innerText = "Connection interrupted.";
+			// 	break;
+			case 4:
+				// statusTemplate.innerText = "Device disconnected.";
+				// updateStatusIcon(statusRes.message, statusRes.statusCode);
+				break;
+				// default:
+				// statusTemplate.innerText = "Unknown status.";
+				break;
+		}
+		// statusTemplate.innerText = statusRes;
+	} catch (error) {
+		// console.log("Stop Screen Mirroring");
 	}
 }
 
