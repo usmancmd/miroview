@@ -345,3 +345,27 @@ function resetStart(code) {
 		controlBtn.addEventListener("click", startMirroringHandler);
 	}
 }
+
+function updateStatusIcon(msg, code) {
+	if (code === 2) {
+		netStatus.innerHTML = '<i class="fa-solid fa-plug-circle-xmark"></i>';
+		netStatus.className = "net-icon-active-red";
+		netStatus.title = msg;
+	} else if (code === 0) {
+		netStatus.innerHTML = '<i class="fa-solid fa-wifi"></i>';
+		netStatus.className = "net-icon-active-blue";
+		netStatus.title = msg;
+	} else if (code === 3) {
+		// resetStart(code);
+		netStatus.innerHTML = '<i class="fa-solid fa-plug-circle-check"></i>';
+		netStatus.className = "net-icon-active-blue";
+		netStatus.title = msg;
+	} else if (code === 4) {
+		netStatus.className = "net-icon-non-active";
+		netStatus.title = msg;
+	} else if (code === 5) {
+		netStatus.innerHTML = '<i class="fa-solid fa-road-circle-xmark"></i>';
+		netStatus.className = "net-icon-active-red";
+		netStatus.title = msg;
+	}
+}
