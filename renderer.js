@@ -228,6 +228,7 @@ async function startMirroringHandler() {
 			// startText.style.opacity = 1;
 			updateStartBtn(startBtn, startText, loader, 1);
 
+			//invoke setStop to get things ready to stop the connection
 			setStop();
 		}
 
@@ -313,3 +314,34 @@ async function stopMirroringHandler() {
 }
 
 controlBtn.addEventListener("click", startMirroringHandler);
+
+function setStop() {
+	const btnText = document.getElementById("start-btn-text-id");
+	const startIcon = document.getElementById("start-icon-id");
+	btnText.innerText = btnText.innerText === "Start" ? "Stop" : "Start";
+	startIcon.className =
+		startIcon.className === "fa-solid fa-play start-icon"
+			? "fa-solid fa-stop start-icon"
+			: "fa-solid fa-play start-icon";
+	controlBtn.removeEventListener("click", startMirroringHandler);
+	controlBtn.addEventListener("click", stopMirroringHandler);
+}
+
+function resetStart(code) {
+	const btnText = document.getElementById("start-btn-text-id");
+	const startIcon = document.getElementById("start-icon-id");
+	if (code === 2 || code === 3 || code === 4 || code === 5) {
+		btnText.innerText = btnText.innerText === "Start" ? "Stop" : "Start";
+		startIcon.className =
+			startIcon.className === "fa-solid fa-play start-icon"
+				? "fa-solid fa-stop start-icon"
+				: "fa-solid fa-play start-icon";
+
+		setTimeout(() => {
+			netStatus.className = "net-icon-non-active";
+			// netStatus.title = "No Active Connections";
+		}, 3000);
+
+		controlBtn.addEventListener("click", startMirroringHandler);
+	}
+}
