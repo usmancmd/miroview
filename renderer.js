@@ -1,14 +1,19 @@
+// Status
+const netStatus = document.getElementById("net-status-id");
+
 const bottomBtns = document.getElementById("bottom-btns-id");
 
 const btnOnTop = document.getElementById("btn-on-top");
-const btnReadOnlyOrFront = document.getElementById("btn-read-only-or-front");
+const btnReadOnlyOrFrontCam = document.getElementById(
+	"btn-read-only-or-frontCam"
+);
 const btnNoAudio = document.getElementById("btn-no-audio");
 const btnNoDisplay = document.getElementById("btn-no-display");
 const btnLandscape = document.getElementById("btn-landscape");
 
 const btnArray = [
 	btnOnTop,
-	btnReadOnlyOrFront,
+	btnReadOnlyOrFrontCam,
 	btnNoAudio,
 	btnNoDisplay,
 	btnLandscape,
@@ -78,7 +83,7 @@ for (const btn of btnArray) {
 
 		// Handle undefined config
 		if (config) {
-			const isToggled = (config.isToggled = !config.isToggled);
+			const isToggled = (config.isToggled = !config.isToggled); // flip isToggled prop of config b4 assigning it to a variable
 
 			// Update button appearance
 			btn.style.background = isToggled ? "#fff" : "rgba(255, 255, 255, 0.165)";
@@ -95,7 +100,6 @@ for (const btn of btnArray) {
 }
 
 function updateCommandOptions(modeButtons) {
-	// if (modeCommandOptions === "") {
 	try {
 		commandOptions = Object.values(modeButtons)
 			.filter((config) => config.isToggled)
@@ -105,7 +109,7 @@ function updateCommandOptions(modeButtons) {
 		console.error("error updating commandOptions");
 	}
 
-	console.log("CommandOptions :", mode, commandOptions);
+	console.log("CommandOptions :", mode, commandOptions); // useful logs for debugging
 }
 
 const screenLink = document.getElementById("screen-link");
@@ -124,7 +128,7 @@ function screenLinkHandler() {
        <h5 class="btn-text">Read Only</h5>
     `;
 
-	// Reset all toggles for screen
+	// Reset all toggles
 	for (const key in mirrorConfigButtons) {
 		if (mirrorConfigButtons.hasOwnProperty(key)) {
 			mirrorConfigButtons[key].isToggled = false;
@@ -177,3 +181,90 @@ function cameraLinkHandler() {
 // Initializing event listeners
 screenLink.addEventListener("click", screenLinkHandler);
 cameraLink.addEventListener("click", cameraLinkHandler);
+
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////
+
+const startScrcpyConnection = async () => {
+	const res = await window.electronAPI.startScrcpy();
+	console.log("am here...");
+	return res;
+};
+
+async function startMirroringHandler() {
+	const loader = document.createElement("i");
+	loader.className = "loader";
+	// controlBtn.removeChild(startBtn);
+	// // controlBtn.removeChild(startText);
+	// controlBtn.appendChild(loader);
+	// controlBtn.appendChild(startText);
+	// startText.style.opacity = 0;
+	updateStartBtn(startBtn, startText, loader, 0);
+	console.log("commandOptions:", commandOptions);
+
+	//invoke setStop to get things ready to stop the connection
+	// setStop();
+
+	try {
+		// statusTemplate.innerText = "Connecting...";
+		const response = await startScrcpyConnection();
+		const statusRes = JSON.parse(response);
+
+		if (statusRes) {
+			// controlBtn.removeChild(loader);
+			// // controlBtn.removeChild(startText);
+			// controlBtn.appendChild(startBtn);
+			// controlBtn.appendChild(startText);
+			// startText.style.opacity = 1;
+			updateStartBtn(startBtn, startText, loader, 1);
+
+			setStop();
+		}
+
+		console.log(statusRes);
+
+		// switch (statusRes.statusCode) {
+		// 	case 0:
+		// 		statusTemplate.innerText = "Connection successful.";
+		// 		break;
+		// 	case 1:
+		// 		statusTemplate.innerText = "Connection failed.";
+		// 		break;
+		// 	case 2:
+		// 		// statusTemplate.innerText = "No device found.";
+		// 		showToast(statusRes.message, statusRes.statusCode);
+		// 		break;
+		// 	case 3:
+		// 		statusTemplate.innerText = "USB Connected, Wi-Fi Pending...";
+		// 		break;
+		// 	case 4:
+		// 		statusTemplate.innerText = "Device disconnected.";
+		// 		break;
+		// 	case 5:
+		// 		statusTemplate.innerText = "Connection Interrupt.";
+		// 		break;
+		// 	case 6:
+		// 		statusTemplate.innerText = "Loading...";
+		// 		break;
+		// 	default:
+		// 		statusTemplate.innerText = "Unknown status.";
+		// 		break;
+		// }
+
+		for (let i = 0; i <= 5; i++) {
+			if (i === statusRes.statusCode) {
+				if (statusRes) resetStart(i);
+
+				updateStatusIcon(statusRes.message, statusRes.statusCode);
+			} else if (statusRes === null) {
+				// resetStart();
+			}
+		}
+	} catch (error) {
+		console.error("An error occurred:", error);
+		// statusTemplate.innerText = "An unexpected error occurred.";
+	}
+}
+
+controlBtn.addEventListener("click", startMirroringHandler);
