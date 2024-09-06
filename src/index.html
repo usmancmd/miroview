@@ -1,19 +1,31 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
   <meta charset="UTF-8" />
-  <title>Hello World!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+  <title>Miroview</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 
 <body>
-  <h1>💖 Hello World!</h1>
-  <p>Welcome to your Electron application.</p>
-  <button id="test-btn">test</button>
-  <button id="start-btn">Start Connection</button>
-  <button id="stop-btn">Stop Connection</button>
+  <!-- Window navbar -->
+  <nav class="nav">
+    <p id="title">Miroview</p>
+    <div class="fa-solid fa-minus drag"></div>
+    <div class="nav-buttons">
+      <button id="minimize"><i class="fa-solid fa-minus"></i></button>
+      <!-- <button id="maximize"><i class="fa-regular fa-square"></i></button> -->
+      <button id="close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+  </nav>
+
+
+  <!-- JS files -->
   <script src="../renderer.js"></script>
+  <script src="../script.js"></script>
 </body>
+
 
 </html>
