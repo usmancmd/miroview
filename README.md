@@ -1,2 +1,2 @@
 
-![Screenshot 2024-09-08 085654](https://github.com/user-attachments/assets/0b7cf84c-2a70-47f4-82a5-5e564c536e12)
+![miroview demo gif](https://github.com/user-attachments/assets/262c78d0-36ff-48bf-a2f1-3d340d4533b3)
