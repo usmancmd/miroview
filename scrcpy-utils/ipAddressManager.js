@@ -57,7 +57,7 @@ function getDeviceIpAddress() {
 					console.log(`${index + 1}: ${device}`);
 				});
 
-				// For simplicity, we'll select the first non-emulator device (modify this as needed)
+				// For simplicity, select the first non-emulator device
 				targetDevice =
 					devices.find((device) => !device.startsWith("emulator")) ||
 					devices[0];

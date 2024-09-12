@@ -4,6 +4,7 @@ const startText = document.getElementById("start-btn-text-id");
 
 // Status
 const netStatus = document.getElementById("net-status-id");
+const controlBtn = document.getElementById("control-btn");
 
 const bottomBtns = document.getElementById("bottom-btns-id");
 
@@ -398,3 +399,20 @@ window.electronAPI.customEvent.on("status-update", (event, data) => {
 		// }, 6000);
 	}
 });
+
+// const controlBtn = document.getElementById('controlBtn');
+// const startText = document.getElementById('startText');
+
+function updateStartBtn(btn, text, loader, opacity) {
+	// Clear the controlBtn contents
+	controlBtn.innerHTML = "";
+
+	if (opacity === 0) {
+		controlBtn.appendChild(loader);
+	} else if (opacity === 1) {
+		controlBtn.appendChild(btn);
+	}
+
+	controlBtn.appendChild(text);
+	startText.style.opacity = opacity;
+}
