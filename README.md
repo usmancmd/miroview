@@ -1,2 +1,1 @@
-
-![miroview demo gif](https://github.com/user-attachments/assets/262c78d0-36ff-48bf-a2f1-3d340d4533b3)
+![miroview demo gif](https://raw.githubusercontent.com/usmancmd/miroview/main/miroview-demo.gif)
