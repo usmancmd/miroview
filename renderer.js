@@ -128,7 +128,7 @@ function screenLinkHandler() {
 	}
 
 	// Update Read Only button to default state
-	document.getElementById("btn-read-only-or-front").innerHTML = `
+	document.getElementById("btn-read-only-or-frontCam").innerHTML = `
        <i class="fa-brands fa-creative-commons-zero btn-icon"></i>
        <h5 class="btn-text">Read Only</h5>
     `;
@@ -159,7 +159,7 @@ function cameraLinkHandler() {
 	}
 
 	// Update Front Cam button to default state
-	document.getElementById("btn-read-only-or-front").innerHTML = `
+	document.getElementById("btn-read-only-or-frontCam").innerHTML = `
         <i class="fa-solid fa-camera-rotate btn-icon"></i>
         <h5 class="btn-text">Front Cam</h5>
     `;
