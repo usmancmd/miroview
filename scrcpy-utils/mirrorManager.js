@@ -1,6 +1,15 @@
 const { exec, execSync, spawn } = require("child_process");
 const path = require("node:path");
 const { getDeviceIpAddress } = require("./ipAddressManager");
+const eventEmitter = require("../events"); // Import the shared EventEmitter
+
+const scrcpyPath = path.join(
+	__dirname,
+	"resources",
+	"scrcpy-win64-v2.6.1",
+	"scrcpy.exe"
+);
+console.log(scrcpyPath.replace(/scrcpy-utils[\/\\]/, ""));
 
 let scrcpyProcess;
 let isScrcpyProcessExist = false;

@@ -283,7 +283,7 @@ async function stopMirroringHandler() {
 	try {
 		const response = await stopScrcpyConnection();
 		const statusRes = JSON.parse(response);
-		// resetStart(statusRes.statusCode);
+		resetStart(statusRes.statusCode);
 
 		console.log(statusRes); // log this for now!
 
