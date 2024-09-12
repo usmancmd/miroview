@@ -67,8 +67,8 @@ let mainWindow;
 const createWindow = () => {
 	// Create the browser window.
 	mainWindow = new BrowserWindow({
-		// width: isDev ? 1400 : 730,
-		width: 730,
+		width: isDev ? 1400 : 730,
+		// width: 730,
 		height: 450,
 		frame: false,
 		resizable: false,
@@ -87,7 +87,7 @@ const createWindow = () => {
 
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools();
-	// mainWindow.webContents.openDevTools({ mode: "right" });
+	mainWindow.webContents.openDevTools({ mode: "right" });
 	mainWindow.webContents.on("did-finish-load", () => {
 		mainWindow.setTitle("Miroview");
 	});

@@ -1,12 +1,12 @@
 const { exec, execSync, spawn } = require("child_process");
 const path = require("node:path");
-const { getDeviceIpAddress2 } = require("./ipAddressManager");
+const { getDeviceIpAddress } = require("./ipAddressManager");
 
 let scrcpyProcess;
 let isScrcpyProcessExist = false;
 let isDisconnected = false;
 
-async function stopMirroringProcess() {
+async function startMirroringProcess() {
 	// console.log("ipAddress", ipAddress);
 
 	try {
@@ -50,7 +50,7 @@ async function stopMirroringProcess() {
 			console.log("ADB process is already running.");
 		}
 
-		const ipAddress = await getDeviceIpAddress2();
+		const ipAddress = await getDeviceIpAddress();
 		if (!ipAddress) {
 			return { statusCode: 2, message: "No device found" };
 		}
@@ -226,6 +226,6 @@ async function stopScrcpyProcess() {
 }
 
 module.exports = {
-	stopMirroringProcess,
+	startMirroringProcess,
 	stopMirroringProcess,
 };
