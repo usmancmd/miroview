@@ -15,21 +15,26 @@ let scrcpyProcess;
 let isScrcpyProcessExist = false;
 let isDisconnected = false;
 
-async function setAdbPort() {
-	await new Promise((resolve, reject) => {
-		exec("adb tcpip 5555", (error, stdout, stderr) => {
-			if (error) {
-				console.error(`Failed to set ADB to TCP mode: ${error.message}`);
-				return reject(error);
-			}
-			console.log(`ADB port set to 5555: ${stdout}`);
-			resolve();
-		});
-	});
-}
+// async function setAdbPort() {
+// 	await new Promise((resolve, reject) => {
+// 		exec("adb tcpip 5555", (error, stdout, stderr) => {
+// 			if (error) {
+// 				console.error(`Failed to set ADB to TCP mode: ${error.message}`);
+// 				return reject(error);
+// 			}
+// 			console.log(`ADB port set to 5555: ${stdout}`);
+// 			resolve();
+// 		});
+// 	});
+// }
 
-async function startMirroringProcess() {
-	// console.log("ipAddress", ipAddress);
+async function startMirroringProcess(commandOptions) {
+	const onTop = commandOptions.OnTop || "";
+	const readOnly = commandOptions.readOnly || "";
+	const frontCam = commandOptions.frontCam || "";
+	const noAudio = commandOptions.noAudio || "";
+	const noVideo = commandOptions.noVideo || "";
+	const landscape = commandOptions.landscape || "";
 
 	try {
 		// Step 1: Check if ADB process is running
@@ -69,10 +74,10 @@ async function startMirroringProcess() {
 				});
 			});
 
-			await setAdbPort();
+			// await setAdbPort();
 		} else {
 			console.log("ADB process is already running.");
-			await setAdbPort();
+			// await setAdbPort();
 		}
 
 		const ipAddress = await getDeviceIpAddress();
@@ -83,7 +88,7 @@ async function startMirroringProcess() {
 		const command = `${scrcpyPath.replace(
 			/scrcpy-utils[\/\\]/,
 			""
-		)} --tcpip=${ipAddress}:5555 --window-title "My Phone Screen"`;
+		)} --tcpip=${ipAddress}:5555 ${onTop} ${readOnly} ${frontCam} ${noAudio} ${noVideo} ${landscape}`;
 
 		console.log("Starting scrcpy with command:", command);
 
