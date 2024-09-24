@@ -7,15 +7,18 @@ const {
 	stopMirroringProcess,
 } = require("./scrcpy-utils/mirrorManager");
 
-async function startScreenMirror() {
-	const status = await startMirroringProcess();
+async function startScreenMirror(commandOptions) {
+	const status = await startMirroringProcess(commandOptions);
 	console.log("from line 20", status);
 	return status;
 }
 
-ipcMain.handle("start-scrcpy", async () => {
+ipcMain.handle("start-scrcpy", async (event, commandOptions) => {
+	const {} = commandOptions;
+	// console.log(Object.entries(commandOptions));
+
 	try {
-		const result = await startScreenMirror();
+		const result = await startScreenMirror(commandOptions);
 		if (result.statusCode === 6) {
 			mainWindow.webContents.send("status-update", JSON.stringify(result));
 			const result2 = await startScreenMirror();
