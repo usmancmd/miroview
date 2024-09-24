@@ -27,7 +27,8 @@ const btnArray = [
 
 let mode = "display"; // Mode can be "display" or "camera"
 
-let commandOptions = "";
+let commandOptions = {};
+console.log(typeof commandOptions);
 
 const mirrorConfigButtons = {
 	onTop: {
@@ -107,10 +108,19 @@ for (const btn of btnArray) {
 
 function updateCommandOptions(modeButtons) {
 	try {
-		commandOptions = Object.values(modeButtons)
-			.filter((config) => config.isToggled)
-			.map((config) => config.value)
-			.join(" ");
+		// commandOptions = Object.values(modeButtons)
+		// 	.filter((config) => config.isToggled)
+		// 	.map((config) => config.value)
+		// 	.join(" ");
+		Object.values(modeButtons).forEach((config) => {
+			if (config.isToggled) {
+				// If the button is toggled, add its value to commandOptions
+				commandOptions[config.name] = config.value;
+			} else {
+				// If it's not toggled, remove it from commandOptions (if it exists)
+				delete commandOptions[config.name];
+			}
+		});
 	} catch (error) {
 		console.error("error updating commandOptions");
 	}
@@ -178,7 +188,7 @@ function cameraLinkHandler() {
 		btn.style.color = "rgba(255, 255, 255, 1)";
 	}
 
-	commandOptions = "";
+	commandOptions = {};
 
 	console.log("Mode switched to: ", mode);
 	console.log("mirrorCameraButtons", mirrorConfigButtons);
@@ -193,7 +203,7 @@ cameraLink.addEventListener("click", cameraLinkHandler);
 ///////////////////////////////////////////////////////
 
 const startScrcpyConnection = async () => {
-	const res = await window.electronAPI.startScrcpy();
+	const res = await window.electronAPI.startScrcpy(commandOptions);
 	// console.log("am here...", res);
 	return res;
 };
