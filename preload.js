@@ -6,7 +6,8 @@ contextBridge.exposeInMainWorld("electronAPI", {
 	quitWindow: () => ipcRenderer.invoke("quit-window"),
 
 	// App functions channels
-	startScrcpy: () => ipcRenderer.invoke("start-scrcpy"),
+	startScrcpy: (commandOptions) =>
+		ipcRenderer.invoke("start-scrcpy", commandOptions),
 	stopScrcpy: () => ipcRenderer.invoke("stop-scrcpy"),
 	statusUpdate: () => ipcRenderer.invoke("status-update"),
 	customEvent: {
