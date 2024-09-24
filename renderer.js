@@ -3,6 +3,7 @@ const startIcon = document.getElementById("start-icon-id");
 const startText = document.getElementById("start-btn-text-id");
 
 // Status
+const statusPopup = document.getElementById("status-popup-id");
 const netStatus = document.getElementById("net-status-id");
 const controlBtn = document.getElementById("control-btn");
 
@@ -351,23 +352,34 @@ function updateStatusIcon(msg, code) {
 	if (code === 2) {
 		netStatus.innerHTML = '<i class="fa-solid fa-plug-circle-xmark"></i>';
 		netStatus.className = "net-icon-active-red";
-		netStatus.title = msg;
+		// netStatus.title = msg;
+		netStatus.setAttribute("tooltip", msg);
+		updateStatusPopup(msg);
+		// console.log(netStatus.getAttribute(tooltip));
 	} else if (code === 0) {
 		netStatus.innerHTML = '<i class="fa-solid fa-wifi"></i>';
 		netStatus.className = "net-icon-active-blue";
-		netStatus.title = msg;
+		// netStatus.title = msg;
+		netStatus.setAttribute("tooltip", msg);
+		updateStatusPopup(msg);
 	} else if (code === 3) {
 		// resetStart(code);
 		netStatus.innerHTML = '<i class="fa-solid fa-plug-circle-check"></i>';
 		netStatus.className = "net-icon-active-blue";
-		netStatus.title = msg;
+		// netStatus.title = msg;
+		netStatus.setAttribute("tooltip", msg);
+		updateStatusPopup(msg);
 	} else if (code === 4) {
 		netStatus.className = "net-icon-non-active";
-		netStatus.title = msg;
+		// netStatus.title = msg;
+		netStatus.setAttribute("tooltip", msg);
+		updateStatusPopup(msg);
 	} else if (code === 5) {
 		netStatus.innerHTML = '<i class="fa-solid fa-road-circle-xmark"></i>';
 		netStatus.className = "net-icon-active-red";
-		netStatus.title = msg;
+		// netStatus.title = msg;
+		netStatus.setAttribute("tooltip", msg);
+		updateStatusPopup(msg);
 	}
 }
 
@@ -415,4 +427,12 @@ function updateStartBtn(btn, text, loader, opacity) {
 
 	controlBtn.appendChild(text);
 	startText.style.opacity = opacity;
+}
+
+function updateStatusPopup(msg) {
+	statusPopup.style.display = "block";
+	statusPopup.setAttribute("status-popup", msg);
+	setTimeout(() => {
+		statusPopup.style.display = "none";
+	}, 3000);
 }
